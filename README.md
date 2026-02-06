@@ -5,7 +5,6 @@
 - Misha Makaroff
 - Angad Bains
 
-
 ## Visiting Our NGINX Instance
 
 ![Alt text for the image](lab5-proof.png)
@@ -14,8 +13,9 @@
 
 ## Steps Taken
 
-1. We defined the image source in a build block
-```
+- We defined the image source in a build block
+
+```bash
 build {
   name = "web-nginx"
   sources = [
@@ -24,8 +24,9 @@ build {
   ]
 ```
 
-2. We used a shell provisioner to run commands to create folders and set permissions on them
-```
+- We used a shell provisioner to run commands to create folders and set permissions on them
+
+```hcl
   provisioner "shell" {
     inline = [
       "echo creating directories",
@@ -36,28 +37,39 @@ build {
       "sudo chown admin /web/html /tmp/web"
     ]
   }
+```
 
-```
-3. We used two file provisioners to upload our NGINX configuration and website index files.
-```
+- We used two file provisioners to upload our NGINX configuration and website index files.
+
+```hcl
   provisioner "file" {
     # COMPLETE ME add the HTML file to your image
     source      = "files/index.html"
     destination = "/web/html/index.html"
   }
 ```
-```
+
+```hcl
   provisioner "file" {
     # COMPLETE ME add the nginx.conf file to your image
     source      = "files/nginx.conf"
     destination = "/tmp/web/nginx.conf"
   }
 ```
-4. We used a shell provisioner to specify the two scripts to upload and run (NGINX installation and configuration scripts)
-```
+
+- We used a shell provisioner to specify the two scripts to upload and run (NGINX installation and configuration scripts)
+
+```hcl
   provisioner "shell" {
     scripts = [
       "scripts/install-nginx",
       "scripts/setup-nginx"
     ]
+  }
 ```
+
+## References
+
+1. [Build Block Syntax](https://developer.hashicorp.com/packer/docs/templates/hcl_templates/blocks/build)
+2. [Provisioner Syntax](https://developer.hashicorp.com/packer/docs/templates/hcl_templates/blocks/build/provisioner)
+3. [Shell Provisioner Syntax](https://developer.hashicorp.com/packer/docs/provisioners/shell)
